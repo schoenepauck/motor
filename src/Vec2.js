@@ -1,71 +1,105 @@
+/**
+ * A 2D Vector class with a basic set of vector math methods.
+ */
 function Vec2 (x, y)
 {
   this.x = x || 0.0;
   this.y = y || 0.0;
   this.oldX = 0.0;
   this.oldY = 0.0;
-  this.savedLengthSquared = 0.0;
-  this.savedLength = 0.0;
+  this.cachedLengthSquared = 0.0;
+  this.cachedLength = 0.0;
 }
 
 
+
+/**
+ * create and return a copy of the vector.
+ */
 Vec2.prototype.clone = function ()
 {
   return new Vec2(this.x, this.y);
 }
 
 
+/**
+ * Get the squared length (magnitude) of the vector.
+ * The squared length of the vector is cached; unless the x and/or y
+ * values have changed, the cached length is returned.
+ */
 Vec2.prototype.lengthSquared = function ()
 {
   if ((this.oldX != this.x) || (this.oldY != this.y))
   {
     this.oldX = this.x;
     this.oldY = this.y;
-    this.savedLengthSquared = this.x * this.x + this.y * this.y;
-    this.savedLength = Math.sqrt(this.savedLengthSquared);
+    this.cachedLengthSquared = this.x * this.x + this.y * this.y;
+    this.cachedLength = Math.sqrt(this.cachedLengthSquared);
   }
-  return this.savedLengthSquared;
+  return this.cachedLengthSquared;
 };
 
 
+/**
+ * Get the length (magnitude) of the vector.
+ * The length of the vector is cached; unless the x and/or y
+ * values have changed, the cached length is returned.
+ */
 Vec2.prototype.length = function ()
 {
   if ((this.oldX != this.x) || (this.oldY != this.y))
   {
     this.oldX = this.x;
     this.oldY = this.y;
-    this.savedLengthSquared = this.x * this.x + this.y * this.y;
-    this.savedLength = Math.sqrt(this.savedLengthSquared);
+    this.cachedLengthSquared = this.x * this.x + this.y * this.y;
+    this.cachedLength = Math.sqrt(this.cachedLengthSquared);
   }
-  return this.savedLength;
+  return this.cachedLength;
 };
 
 
+/**
+ * Set vector to zero (x=0, y=0)
+ */
 Vec2.prototype.zero = function ()
 {
   this.x = this.y = 0.0;
 };
 
 
-Vec2.prototype.add = function (v)
+/**
+ * Add another vector
+ */
+Vec2.prototype.add = function (vector)
 {
-  this.x += v.x;
-  this.y += v.y;
+  this.x += vector.x;
+  this.y += vector.y;
 };
 
 
-Vec2.prototype.sub = function (v)
+/**
+ * Subtract another vector
+ */
+Vec2.prototype.sub = function (vector)
 {
-  this.x -= v.x;
-  this.y -= v.y;
-}
-
-Vec2.prototype.mult = function (s)
-{
-  this.x *= s;
-  this.y *= s;
+  this.x -= vector.x;
+  this.y -= vector.y;
 };
 
+
+/**
+ * Multiply vector with a scalar value
+ */
+Vec2.prototype.mult = function (scalar)
+{
+  this.x *= scalar;
+  this.y *= scalar;
+};
+
+
+/**
+ * Normalize vector (set length to 1 without changing direction)
+ */
 Vec2.prototype.normalize = function ()
 {
   var l = this.length();
@@ -74,4 +108,4 @@ Vec2.prototype.normalize = function ()
     this.x /= l;
     this.y /= l;
   }
-}
+};
