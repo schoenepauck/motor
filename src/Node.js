@@ -1,3 +1,14 @@
+function NodePhysics (options)
+{
+	this.friction = options.friction || 0.9;
+	this.bounceFriction = options.bouceFriction || 0.75;
+	this.minSpeed = options.minSpeed || 0.1;
+	this.maxSpeed = options.maxSpeed || 80.0;
+	this.minSpeedSquared = this.minSpeed * this.minSpeed;
+	this.maxSpeedSquared = this.maxSpeed * this.maxSpeed;
+}	
+
+
 function Node (context, options)
 {
   this.pos = new Vec2();
@@ -12,6 +23,7 @@ function Node (context, options)
   */
   this.color = options.color || "#ffffff";
   this.size = options.size || 4;
+  this.physics = options.physics || new NodePhysics();
 }
 
 
@@ -31,11 +43,11 @@ Node.prototype.update = function ()
   var speedSquared = this.velocity.lengthSquared();
   if (speedSquared > 0.0)
   {
-    if (speedSquared < MIN_SPEED_SQUARED)
+    if (speedSquared < this.physics.minSpeedSquared)
       this.velocity.zero();
     else
     {
-      this.velocity.mult(FRICTION);
+      this.velocity.mult(this.physics.friction);
       this.pos.add(this.velocity);
     }
   }
@@ -44,25 +56,25 @@ Node.prototype.update = function ()
   {
     this.pos.x = this.size;
     this.velocity.x *= -1;
-    this.velocity.mult(BOUNCE_FRICTION);
+    this.velocity.mult(this.physics.bounceFriction);
   }
   else if (this.pos.x > sketch.width - this.size)
   {
     this.pos.x = sketch.width - this.size;
     this.velocity.x *= -1;
-    this.velocity.mult(BOUNCE_FRICTION);
+    this.velocity.mult(this.physics.bounceFriction);
   }
   if (this.pos.y < this.size)
   {
     this.pos.y = this.size;
     this.velocity.y *= -1;
-    this.velocity.mult(BOUNCE_FRICTION);
+    this.velocity.mult(this.physics.bounceFriction);
   }
   else if (this.pos.y > sketch.height - this.size)
   {
     this.pos.y = sketch.height - this.size;
     this.velocity.y *= -1;
-    this.velocity.mult(BOUNCE_FRICTION);
+    this.velocity.mult(this.physics.bounceFriction);
   }
 };
 
