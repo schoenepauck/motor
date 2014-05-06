@@ -12,8 +12,8 @@ function NodePhysics (options)
 function Node (context, options)
 {
   this.pos = new Vec2();
-  this.pos.x = options.x || random(context.width);
-  this.pos.y = options.y || random(context.height);
+  this.pos.x = options.x || 0.0;
+  this.pos.y = options.y || 0.0;
   this.velocity = new Vec2();
   // Start with some random velocity
   /*
@@ -38,7 +38,7 @@ Node.prototype.applyForce = function (force)
 };
 
 
-Node.prototype.update = function ()
+Node.prototype.update = function (context)
 {
   var speedSquared = this.velocity.lengthSquared();
   if (speedSquared > 0.0)
@@ -52,15 +52,16 @@ Node.prototype.update = function ()
     }
   }
   
+  // Bounce off context edges
   if (this.pos.x < this.size)
   {
     this.pos.x = this.size;
     this.velocity.x *= -1;
     this.velocity.mult(this.physics.bounceFriction);
   }
-  else if (this.pos.x > sketch.width - this.size)
+  else if (this.pos.x > context.width - this.size)
   {
-    this.pos.x = sketch.width - this.size;
+    this.pos.x = context.width - this.size;
     this.velocity.x *= -1;
     this.velocity.mult(this.physics.bounceFriction);
   }
@@ -70,9 +71,9 @@ Node.prototype.update = function ()
     this.velocity.y *= -1;
     this.velocity.mult(this.physics.bounceFriction);
   }
-  else if (this.pos.y > sketch.height - this.size)
+  else if (this.pos.y > context.height - this.size)
   {
-    this.pos.y = sketch.height - this.size;
+    this.pos.y = context.height - this.size;
     this.velocity.y *= -1;
     this.velocity.mult(this.physics.bounceFriction);
   }
