@@ -61,7 +61,7 @@ Vec2.prototype.length = function ()
 /**
  *  Return the direction (rotation) in radians
  */
-Vec2.prototype.dir = function ()
+Vec2.prototype.direction = function ()
 {
 	return Math.atan2(this.y, this.x);
 }
